@@ -18,3 +18,8 @@ To update:
 ```
 conda env update -f environment.yml
 ```
+
+To install editable src"
+```
+conda develop .
+```
