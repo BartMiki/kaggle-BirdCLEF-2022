@@ -1,3 +1,7 @@
+preprocessing:
+  min_rating: 3.0
+  scored_only: true
+
 training:
   batch_size: 50
   epochs: 100

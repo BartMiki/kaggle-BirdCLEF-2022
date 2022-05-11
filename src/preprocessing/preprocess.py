@@ -2,11 +2,11 @@ import argparse
 from pathlib import Path
 
 from src.config import BaseConfig
+from src.preprocessing.utils import read_train_metadata
 from src.utils import path_type
 
-
-def train():
-    pass
+def preprocess(config: BaseConfig):
+    df = read_train_metadata(config.preprocessing)
 
 def run_argparse():
     parser = argparse.ArgumentParser()
@@ -22,7 +22,8 @@ def run_argparse():
 def main():
     args = run_argparse()
     config = BaseConfig.from_file(args.config_path)
-    print(config)
+    
+    preprocess(config)
 
 if __name__ == '__main__':
     main()

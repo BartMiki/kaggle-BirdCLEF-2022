@@ -14,7 +14,15 @@ class BaseTrainingConfig:
         pass
 
 @dataclass
+class BasePreprocessingConfig:
+    min_rating: float = None
+    scored_only: int = None
+    encode_classes: bool = True
+
+
+@dataclass
 class BaseConfig:
+    preprocessing: BasePreprocessingConfig
     training: BaseTrainingConfig
 
     @classmethod
