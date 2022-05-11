@@ -9,12 +9,21 @@ class BaseTrainingConfig:
     batch_size: int
     epochs: int
     learning_rate: float
+    classes: int
 
     def __post_init__(self):
         pass
 
 @dataclass
+class BasePreprocessingConfig:
+    min_rating: float = None
+    scored_only: int = None
+    encode_classes: bool = True
+
+
+@dataclass
 class BaseConfig:
+    preprocessing: BasePreprocessingConfig
     training: BaseTrainingConfig
 
     @classmethod
