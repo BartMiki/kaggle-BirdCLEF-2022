@@ -9,6 +9,7 @@ class BaseTrainingConfig:
     batch_size: int
     epochs: int
     learning_rate: float
+    classes: int
 
     def __post_init__(self):
         pass
