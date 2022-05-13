@@ -1,24 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-import gzip
 import json
-from typing import Callable, List, Union
-from matplotlib.pyplot import axes
+from typing import List
 import pandas as pd
-import torch
 import torchaudio
 from joblib import Parallel, delayed
-import os
 from pathlib import Path
 from copy import deepcopy
 from itertools import chain
 import math
 
 from tqdm import tqdm
-from src.preprocessing.transform import Preprocessing, Rechannel, Slice, Slice, TransformF, Seconds
-
-pool = Parallel(-1)
+from src.preprocessing.transform import Preprocessing
 
 
 @dataclass
@@ -62,7 +56,8 @@ def process(params: TrainingPreprocessing, name: str):
     return splits
 
 
-def generate_training(params: TrainingPreprocessing):
+def generate_training(params: TrainingPreprocessing, n_jobs=-1):
+    pool = Parallel(n_jobs)
     df = params.df.copy()
 
     params.output_dir.mkdir(exist_ok=True, parents=True)
