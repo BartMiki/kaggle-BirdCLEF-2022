@@ -1,5 +1,5 @@
 import torchaudio
-from torchaudio.transforms import Spectrogram, Resample
+from torchaudio.transforms import Spectrogram, Resample, MelSpectrogram
 import matplotlib.pyplot as plt
 import torch
 

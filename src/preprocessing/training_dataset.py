@@ -1,20 +1,15 @@
 from __future__ import annotations
-from cProfile import label
 from functools import lru_cache
-import gzip
-from logging import root
-from operator import attrgetter
 from pathlib import Path
-from matplotlib.transforms import Transform
 import pandas as pd
 
 from typing import List, Union
 from attr import field
 from torch.utils.data import Dataset
 from dataclasses import dataclass
-import torch
-import math
 
+import torch
+from torchaudio.transforms import Spectrogram 
 import torchaudio
 from tqdm import tqdm
 from src.preprocessing.transform import Seconds, TransformF, Slice, ZeroPad
@@ -47,6 +42,8 @@ class BirdsDataset(Dataset):
 
         audio = Slice(record.end, record.duration, sampling_rate)(audio)
         audio = ZeroPad(record.duration.as_frames(sampling_rate))(audio)
+        audio = Spectrogram()(audio)
+        audio = torch.cat([audio for _ in range(3)])
 
         return audio, record.label
 
