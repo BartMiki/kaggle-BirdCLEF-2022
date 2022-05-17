@@ -156,6 +156,7 @@ def run(
     record_cache_path: Path,
     training_data_dir: Path,
     model_output_dir: Path,
+    epochs: int = 10,
     learning_rate: float = 1e-3,
     batch_size: int = 128,
     train_val_split: Optional[float] = 0.8,
@@ -184,7 +185,7 @@ def run(
         val = None
     else:
         total = len(dataset)
-        train_split = int(total * 0.8)
+        train_split = int(total * train_val_split)
         val_split = total - train_split
         train, val = torch.utils.data.random_split(dataset, [train_split, val_split], generator=torch.Generator().manual_seed(42))
 
@@ -196,7 +197,7 @@ def run(
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     criterion = nn.BCELoss()
 
-    fit(model, 10, train, optimizer, criterion, device, 
+    fit(model, epochs, train, optimizer, criterion, device, 
         output_dir=model_output_dir,
         validation=val, 
         validation_freq=validation_freq, 
