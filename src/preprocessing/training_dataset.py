@@ -28,7 +28,7 @@ class Record:
     duration: Seconds = Seconds(5)
 
 
-@lru_cache(12000)
+@lru_cache(64)
 def load_audio(path: Path):
     return torchaudio.load(path)
 
