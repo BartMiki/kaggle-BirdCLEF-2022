@@ -151,12 +151,32 @@ def fit(
     joblib.dump(validation_history, output_dir / 'validation_history.joblib')
 
 
+def drop_poor_quality_data(df):
+    return df[df.rating >= 1.5].copy()
+
+
+def drop_long_recordings(df):
+    return df[df.seconds < (15*60)].copy()
+
+
+def clean(df):
+    rules = [drop_poor_quality_data, drop_long_recordings]
+    initial_rows = df.shape[0]
+    for rule in rules:
+        df = rule(df)
+     
+    final_rows = df.shape[0]
+    print(f"Rows before: {initial_rows}, rows after: {final_rows}, difference: {initial_rows - final_rows}")
+    return df
+
+
 def run(
     training_csv_path: Path,
     record_cache_path: Path,
     training_data_dir: Path,
     model_output_dir: Path,
     epochs: int = 10,
+    clean_up: bool = True,
     learning_rate: float = 1e-3,
     batch_size: int = 128,
     train_val_split: Optional[float] = 0.8,
@@ -170,6 +190,8 @@ def run(
 ):
     df = pd.read_csv(training_csv_path)
     df['secondary_labels'] = [eval(r) for r in df.secondary_labels]
+    if clean_up:
+        df = clean(df)
 
     if record_cache_path.exists():
         records, all_encoder, scored_encoder = joblib.load(record_cache_path)
@@ -213,7 +235,6 @@ if __name__ == '__main__':
         Path('model/outputs.gz'),
         Path('data/custom/train_audio'),
         Path('model/'),
-        dataset_limit=1_000,
         save_interval=1
     )
 
