@@ -139,6 +139,14 @@ def fit(
                       f"macro f1: {result['macro/f1']:.3f} "
                       f"samples f1: {result['samples/f1']:.3f}")
 
+    torch.save({
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'loss': loss_value,
+    }, output_dir / f"model.pt")
+
+
     joblib.dump(training_history, output_dir / 'training_history.joblib')
     joblib.dump(validation_history, output_dir / 'validation_history.joblib')
 
